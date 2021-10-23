@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 #[derive(PartialEq, Debug)]
 pub enum ContentType {
     Literal(String),
@@ -79,6 +81,27 @@ pub fn get_content_type(input_line: &str) -> ContentType {
     } else {
         ContentType::Unrecognized
     }
+}
+
+pub fn generate_html_template_var(
+    content: ExpressionData,
+    context: HashMap<String, String>,
+) -> String {
+    let mut html = String::new();
+
+    if let Some(h) = content.head {
+        html.push_str(&h);
+    }
+
+    if let Some(val) = context.get(&content.variable) {
+        html.push_str(&val);
+    }
+
+    if let Some(t) = content.tail {
+        html.push_str(&t);
+    }
+
+    html
 }
 
 #[cfg(test)]
